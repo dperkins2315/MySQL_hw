@@ -240,13 +240,20 @@ where rental.inventory_id= inventory.inventory_id
 and rental.rental_id= payment.rental_id
 and inventory.film_id= film_category.film_id
 and film_category.category_id=category.category_id
-group by category.name desc
+group by category.name order by SUM(payment.amount)desc
 limit 5; 
 
 
 -- 8a
-CREATE TABLE top_five_genres (
-	genre varchar (50) not null);
+create view top_five_genres as
+select category.name, SUM(payment.amount)
+from category, film_category, inventory, payment, rental
+where rental.inventory_id= inventory.inventory_id
+and rental.rental_id= payment.rental_id
+and inventory.film_id= film_category.film_id
+and film_category.category_id=category.category_id
+group by category.name order by SUM(payment.amount)desc
+limit 5;
 
 -- 8b ------
 select * from top_five_genres;
