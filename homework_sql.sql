@@ -233,7 +233,7 @@ select * from payment;
 select * from rental;
 select * from film;
 
--- 7h my group by must be wrong--------
+-- 7h 
 select category.name, SUM(payment.amount)
 from category, film_category, inventory, payment, rental
 where rental.inventory_id= inventory.inventory_id
@@ -255,10 +255,10 @@ and film_category.category_id=category.category_id
 group by category.name order by SUM(payment.amount)desc
 limit 5;
 
--- 8b ------
+-- 8b
 select * from top_five_genres;
 
--- 8c ------
+-- 8c
 drop table top_five_genres;
 
 
