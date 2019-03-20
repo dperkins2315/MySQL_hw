@@ -104,7 +104,7 @@ staff.address_id=address.address_id;
 select * from staff;
 select * from payment;
 
--- 6b should there only be 2 results?------- 
+-- 6b 
 select first_name, last_name, SUM(amount) as 'Total Amount'
 from staff
 inner join payment on
@@ -193,12 +193,12 @@ select * from rental;
 select * from inventory;
 select * from film;
 
--- 7e------- where do i desc?
+-- 7e
 select film.title, count(film.title) as total
 from film, rental, inventory
 where rental.inventory_id=inventory.inventory_id
 and inventory.film_id=film.film_id
-group by film.title; 
+group by film.title order by total desc; 
 
 select * from store;
 select * from rental;
