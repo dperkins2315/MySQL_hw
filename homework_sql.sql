@@ -95,7 +95,7 @@ SHOW CREATE TABLE address;
 select * from staff;
 select * from address;
 
--- 6a
+-- 6a 
 select staff.first_name, staff.last_name, address.address
 from address
 join staff on
@@ -146,54 +146,69 @@ order by customer.last_name ASC;
 select * from film;
 select * from language;
 
--- 7a
-select film.title from film, language 
-where film.title like 'K%' or film.title like 'Q%' 
-and language.name = "English" 
-and film.language_id = language.language_id 
-group by film.title; 
+-- 7a 
+select title
+from film
+where title like "K%"
+or title like "Q%"
+and language_id in
+(
+select language_id
+from language
+where name = "English"
+);
+ 
 
 select * from film;
 select * from film_actor;
 select * from actor;
 
 -- 7b
-select film.title, actor.first_name, actor.last_name 
-from film, film_actor, actor
-where film.title = "Alone Trip"
-and film.film_id = film_actor.film_id
-and film_actor.actor_id = actor.actor_id
-group by actor.first_name, actor.last_name; 
+select title, actor.first_name, actor.last_name 
+from film, actor
+where title = "Alone Trip"
+and actor_id in
+(
+select actor_id 
+from actor
+group by actor.first_name, actor.last_name
+); 
 
 select * from country;
 select * from customer;
 select * from address;
 select * from city;
 
--- 7c
-select customer.first_name, customer.last_name, customer.email
-from customer, country, address, city
-where country = "Canada"
-and country.country_id = city.country_id
-and city.city_id = address.city_id
-and address.address_id = customer.address_id
-group by customer.first_name, customer.last_name; 
+-- 7c ----- 
+select first_name, last_name, email, country
+from customer
+inner join address
+on (customer.address_id = address.address_id)
+inner join city
+on (address.city_id = city.city_id)
+inner join country
+on (city.country_id = country.country_id)
+where country = "Canada";
 
 select * from film_category;
 select * from film;
 select * from category;
 
 -- 7d
-select film.title, category.name
-from film, category, film_category
-where category.name = "family"
-group by film.title; 
+select title, category.name
+from film
+inner join film_category
+on (film.film_id = film_category.film_id)
+inner join category
+on (category.category_id= film_category.category_id)
+where name = "family";
+
 
 select * from rental;
 select * from inventory;
 select * from film;
 
--- 7e
+-- 7e 
 select film.title, count(film.title) as total
 from film, rental, inventory
 where rental.inventory_id=inventory.inventory_id
